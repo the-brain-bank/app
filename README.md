@@ -1,18 +1,42 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Prerequisites
+
+- Node.js (v20 or later)
+- **pnpm** (v10) – the project uses pnpm for package management.
+- Docker (for the PostgreSQL database)
+
 ## Getting Started
 
-First, run the development server:
+1. Install the project dependencies:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+   ```bash
+   pnpm install
+   ```
+
+2. Start the PostgreSQL container:
+
+   ```bash
+   docker compose up -d
+   ```
+
+3. Apply database migrations with Drizzle ORM:
+
+   ```bash
+   pnpm dlx drizzle-kit push
+   ```
+
+   This will create the tables defined in `src/infrastructure/api/db/schema.ts`.
+
+4. Run the development server:
+
+   ```bash
+   pnpm dev
+   ```
+
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+The project uses `next/font` to automatically optimize and load the Geist font.
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
