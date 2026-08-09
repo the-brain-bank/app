@@ -1,11 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { TypographyH3 } from "@/components/ui/typography";
-import { Book } from "@/core/domain/entities/book";
+import type { Book } from "@/core/domain/entities/book";
 import { cn } from "@/lib/utils";
 import { Edit, Image as ImageIcon, Trash2 } from "lucide-react";
-import { RouteType } from "next/dist/lib/load-custom-routes";
-import Link, { LinkProps } from "next/link";
-import { ComponentPropsWithoutRef } from "react";
+import type { RouteType } from "next/dist/lib/load-custom-routes";
+import Image from "next/image";
+import Link, { type LinkProps } from "next/link";
+import type { ComponentPropsWithoutRef } from "react";
 
 export function BookRoot({
   className,
@@ -31,7 +32,7 @@ export function BookCover({
   alt,
   recommendationCount = 0,
   ...props
-}: ComponentPropsWithoutRef<"img"> & {
+}: ComponentPropsWithoutRef<typeof Image> & {
   recommendationCount: number;
 }) {
   return (
@@ -41,11 +42,12 @@ export function BookCover({
         className,
       )}
     >
-      <div className="w-full relative aspect-[3/4] bg-neutral-100 overflow-hidden">
+      <div className="w-full relative aspect-3/4 bg-neutral-100 overflow-hidden">
         {src ? (
-          <img
+          <Image
             src={src}
             alt={alt || "Book cover"}
+            fill
             className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
             {...props}
           />

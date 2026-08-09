@@ -1,6 +1,13 @@
 import type { UserRepository } from "@/core/application/ports/user";
 import type { User } from "@/core/domain/entities/user";
-import { and, desc, eq, ilike, arrayContains, arrayOverlaps } from "drizzle-orm";
+import {
+  and,
+  desc,
+  eq,
+  ilike,
+  arrayContains,
+  arrayOverlaps,
+} from "drizzle-orm";
 import { db } from "./index";
 import { users } from "./schema";
 import { ResultAsync } from "neverthrow";
@@ -41,12 +48,12 @@ export class DrizzleUserRepository implements UserRepository {
     });
   }
 
-  findByRole(payload: {
+  async findByRole<TUser>(payload: {
     role: User["role"] | [];
     limit?: number;
     offset?: number;
     search?: string;
-  }): Promise<User[]> {
+  }): Promise<(User & TUser)[]> {
     const conditions = [];
     if (payload.search) {
       conditions.push(ilike(users.name, `%${payload.search}%`));
@@ -57,12 +64,14 @@ export class DrizzleUserRepository implements UserRepository {
 
     const where = conditions.length > 0 ? and(...conditions) : undefined;
 
-    return db.query.users.findMany({
+    const result = await db.query.users.findMany({
       where,
       limit: payload.limit,
       offset: payload.offset,
       orderBy: [desc(users.createdAt)],
     });
+
+    return result as unknown as (User & TUser)[];
   }
 
   async create(

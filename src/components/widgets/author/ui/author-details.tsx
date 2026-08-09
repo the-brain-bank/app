@@ -10,9 +10,11 @@ export function Widget({ author }: { author: User & AuthorUser }) {
   return (
     <>
       <div className="flex gap-12">
-        <div className="max-w-75">
-          <AuthorImage className="max-h-100 w-auto" src={author.image} />
-        </div>
+        <AuthorImage
+          alt={author.name}
+          className="w-125"
+          src={author.image}
+        />
         <div>
           <AuthorTitle className="relative">{author.name}</AuthorTitle>
           <AuthorBio>{author.bio}</AuthorBio>

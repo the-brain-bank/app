@@ -1,28 +1,19 @@
 import { Button } from "@/components/ui/button";
 import { TypographyH3 } from "@/components/ui/typography";
-import { User } from "@/core/domain/entities/user";
 import { cn } from "@/lib/utils";
 import { Edit, Image as ImageIcon, Trash2 } from "lucide-react";
-import Link from "next/link";
-import { ComponentPropsWithoutRef } from "react";
+import Image from "next/image";
+import type { ComponentPropsWithoutRef } from "react";
 
 export function AuthorRoot({
   className,
-  authorId,
   ...props
-}: ComponentPropsWithoutRef<"div"> & {
-  authorId: User["id"];
-}) {
+}: ComponentPropsWithoutRef<"div">) {
   return (
-    <Link href={`/authors/${authorId}`} className="block w-full">
-      <div
-        className={cn(
-          "group relative flex flex-col gap-3",
-          className,
-        )}
-        {...props}
-      />
-    </Link>
+    <div
+      className={cn("group relative flex flex-col gap-3", className)}
+      {...props}
+    />
   );
 }
 
@@ -31,26 +22,29 @@ export function AuthorImage({
   src,
   alt,
   ...props
-}: ComponentPropsWithoutRef<"img">) {
+}: ComponentPropsWithoutRef<typeof Image>) {
   return (
     <div
       className={cn(
-        "w-full overflow-hidden bg-neutral-100/10",
+        "w-full flex flex-col shadow-lg transition-all hover:shadow-xl",
         className,
       )}
     >
-      {src ? (
-        <img
-          src={src}
-          alt={alt || "author cover"}
-          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-          {...props}
-        />
-      ) : (
-        <div className="flex h-full w-full items-center justify-center text-muted-foreground">
-          <ImageIcon className="h-10 w-10 opacity-20" />
-        </div>
-      )}
+      <div className="w-full relative aspect-3/4 bg-neutral-100 overflow-hidden">
+        {src ? (
+          <Image
+            src={src}
+            alt={alt || "Book cover"}
+            fill
+            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+            {...props}
+          />
+        ) : (
+          <div className="flex h-full w-full items-center justify-center text-muted-foreground">
+            <ImageIcon className="h-10 w-10 opacity-20" />
+          </div>
+        )}
+      </div>
     </div>
   );
 }
@@ -62,7 +56,7 @@ export function AuthorContent({
   return (
     <div
       className={cn(
-        "flex flex-col items-start justify-start w-full",
+        "flex flex-col items-start w-full gap-1 pt-1",
         className,
       )}
       {...props}
@@ -76,7 +70,10 @@ export function AuthorTitle({
 }: ComponentPropsWithoutRef<"h3">) {
   return (
     <TypographyH3
-      className={cn("line-clamp-1 text-xl font-semibold leading-tight text-foreground", className)}
+      className={cn(
+        "line-clamp-1 text-xl font-semibold leading-tight text-foreground",
+        className,
+      )}
       {...props}
     />
   );

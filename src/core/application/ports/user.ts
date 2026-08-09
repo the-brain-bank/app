@@ -5,12 +5,12 @@ export interface UserRepository {
   findById(id: string): Promise<User | null>;
   findBySlug(slug: string): Promise<User | null>;
   findAll(limit?: number, offset?: number, search?: string): Promise<User[]>;
-  findByRole(payload: {
+  findByRole<TUser>(payload: {
     role: User["role"] | [];
     limit?: number;
     offset?: number;
     search?: string;
-  }): Promise<User[]>;
+  }): Promise<(User & TUser)[]>;
   create(person: Omit<User, "id" | "createdAt" | "updatedAt">): Promise<User>;
   updateById(
     id: string,

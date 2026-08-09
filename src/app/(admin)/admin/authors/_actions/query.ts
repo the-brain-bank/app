@@ -1,6 +1,7 @@
 "use server";
 
 import { userRepository, searchAuthorsByNameUseCase } from "@/composition";
+import type { AuthorUser } from "@/core/domain/entities/user";
 
 export async function getAllAuthors(query: {
   limit: number;
@@ -8,7 +9,7 @@ export async function getAllAuthors(query: {
   search?: string;
 }) {
   try {
-    const data = await userRepository.findByRole({
+    const data = await userRepository.findByRole<AuthorUser>({
       role: ["AUTHOR"],
       limit: query.limit,
       offset: query.offset,
