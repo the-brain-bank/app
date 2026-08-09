@@ -6,7 +6,7 @@ export interface UserRepository {
   findBySlug(slug: string): Promise<User | null>;
   findAll(limit?: number, offset?: number, search?: string): Promise<User[]>;
   findByRole(payload: {
-    role: User["role"];
+    role: User["role"] | [];
     limit?: number;
     offset?: number;
     search?: string;

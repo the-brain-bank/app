@@ -22,6 +22,10 @@ import { DrizzleUserRepository } from "./infrastructure/api/db/user";
 import { ImageKitImageUploadService } from "./infrastructure/image-upload/imagekit-io";
 import { GetAllBooksUseCase } from "./core/use-cases/GetAllBooks";
 import { SearchAuthorByNameUseCase } from "./core/use-cases/SearchAuthorsByName";
+import { GetAllRecommendationsUseCase } from "./core/use-cases/GetAllRecommendations";
+import { AddRecommendationUseCase } from "./core/use-cases/AddRecommendation";
+import { AddNewUserUseCase } from "./core/use-cases/AddNewUser";
+import { SearchUsersByNameUseCase } from "./core/use-cases/SearchUsersByName";
 
 // Initialize repositories
 export const bookRepository = new DrizzleBookRepository();
@@ -37,7 +41,9 @@ export const sessionAdapter = new BetterAuthSessionAdapter(userRepository);
 export const imageUploadService = new ImageKitImageUploadService();
 
 // Initialize use cases
-export const uploadNewImageUseCase = new UploadNewImageUseCase(imageUploadService);
+export const uploadNewImageUseCase = new UploadNewImageUseCase(
+  imageUploadService,
+);
 export const getAllBooksUseCase = new GetAllBooksUseCase(bookRepository);
 export const getTopBooksUseCase = new GetTopBooks(bookRepository);
 export const addNewBookUseCase = new AddNewBooksUseCase(
@@ -46,6 +52,10 @@ export const addNewBookUseCase = new AddNewBooksUseCase(
   uploadNewImageUseCase,
 );
 export const addNewAuthorUseCase = new AddNewAuthorUseCase(
+  userRepository,
+  sessionAdapter,
+);
+export const addNewUserUseCase = new AddNewUserUseCase(
   userRepository,
   sessionAdapter,
 );
@@ -69,7 +79,12 @@ export const deleteCategoryUseCase = new DeleteCategoryUseCase(
   categoryRepository,
   sessionAdapter,
 );
-export const searchAuthorsByNameUseCase = new SearchAuthorByNameUseCase(userRepository);
+export const searchAuthorsByNameUseCase = new SearchAuthorByNameUseCase(
+  userRepository,
+);
+export const searchUsersByNameUseCase = new SearchUsersByNameUseCase(
+  userRepository,
+);
 export const getPersonProfileUseCase = new GetPersonProfile(
   userRepository,
   bookRepository,
@@ -85,3 +100,7 @@ export const uploadAuthorImageUseCase = new UploadAuthorImageUseCase(
   userRepository,
   imageUploadService,
 );
+export const getAllRecommendationsUseCase = new GetAllRecommendationsUseCase(
+  recommendationRepository,
+);
+export const addRecommendationUseCase = new AddRecommendationUseCase(recommendationRepository)

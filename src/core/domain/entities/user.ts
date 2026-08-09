@@ -1,17 +1,55 @@
-import { Book } from "./book";
+import type { Book } from "./book";
 
-export const USER_ROLES = ["ADMIN", "EDITOR", "AUTHOR", "USER"] as const;
-export type UserRole = (typeof USER_ROLES)[number];
+export const USER_ROLES = [
+  "ADMIN",
+  "EDITOR",
+  "AUTHOR",
+  "USER",
+  "INFLUENCER",
+] as const;
+export type UserRole = (typeof USER_ROLES)[number][];
 
-export interface User {
+export type User = {
   id: string;
   name: string;
-  bio: string | null;
-  industry: string;
-  role: UserRole;
   image: string;
   createdAt: Date;
   updatedAt: Date;
+} & (AdminUser | EditorUser | AuthorUser | InfluencerUser | BaseUser);
 
-  authoredBooks: Book[]
-}
+export type BaseUser = {
+  role: ["USER"];
+};
+
+export type AdminUser = {
+  role: ["ADMIN", "EDITOR"];
+};
+
+export type EditorUser = {
+  role: ["EDITOR"];
+};
+
+export type AuthorUser = {
+  role: ["AUTHOR"];
+  authoredBooks: Book[];
+  industry: string;
+  image: string;
+  bio: string;
+};
+
+export type InfluencerUser = {
+  role: ["INFLUENCER"];
+  recommendedBooks: Book[];
+  industry: string;
+  image: string;
+  bio: string;
+};
+
+/** Readable label for each role */
+export const ROLE_LABELS: Record<string, string> = {
+  ADMIN: "Admin",
+  EDITOR: "Editor",
+  AUTHOR: "Author",
+  USER: "User",
+  INFLUENCER: "Influencer",
+};

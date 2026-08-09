@@ -1,5 +1,4 @@
-import { Book } from './book';
-import { User } from './user';
+import { z } from "zod";
 
 export interface Recommendation {
   id: string;
@@ -9,8 +8,14 @@ export interface Recommendation {
   sourceUrl: string;
   createdAt: Date;
   updatedAt: Date;
-
-  // relations
-  book: Book;
-  author: User;
 }
+
+export const recommendationSchema = z.object({
+  id: z.uuid(),
+  bookId: z.uuid(),
+  authorId: z.uuid(),
+  quote: z.string().min(1, "Quote is required"),
+  sourceUrl: z.url("Source URL must be a valid URL"),
+  createdAt: z.date(),
+  updatedAt: z.date(),
+});

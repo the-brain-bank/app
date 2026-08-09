@@ -89,86 +89,78 @@ export function DataTable<TData, TValue>(props: DataTableProps<TData, TValue>) {
 
   return (
     <div className="space-y-6">
-      <div className="overflow-hidden rounded-md border">
-        <Table>
-          <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id}>
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
-                    </TableHead>
-                  );
-                })}
+      <Table classNameWrapper="max-h-[500px]">
+        <TableHeader>
+          {table.getHeaderGroups().map((headerGroup) => (
+            <TableRow key={headerGroup.id}>
+              {headerGroup.headers.map((header) => {
+                return (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext(),
+                        )}
+                  </TableHead>
+                );
+              })}
+            </TableRow>
+          ))}
+        </TableHeader>
+        <TableBody>
+          {props.loading ? (
+            Array.from({ length: skeletonRowCount }).map((_, rowIndex) => (
+              <TableRow key={`skeleton-${rowIndex}`}>
+                {props.columns.map((_, colIndex) => (
+                  <TableCell key={`skeleton-${rowIndex}-${colIndex}`}>
+                    <Skeleton className="h-5 w-full" />
+                  </TableCell>
+                ))}
               </TableRow>
-            ))}
-          </TableHeader>
-          <TableBody>
-            {props.loading ? (
-              Array.from({ length: skeletonRowCount }).map((_, rowIndex) => (
-                <TableRow key={`skeleton-${rowIndex}`}>
-                  {props.columns.map((_, colIndex) => (
-                    <TableCell key={`skeleton-${rowIndex}-${colIndex}`}>
-                      <Skeleton className="h-5 w-full" />
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : props.error ? (
-              <TableRow>
-                <TableCell
-                  colSpan={props.columns.length}
-                  className="h-24"
-                >
-                  <div className="flex items-center justify-center gap-2 text-destructive">
-                    <AlertCircle className="size-4" />
-                    <span>{props.error}</span>
-                  </div>
-                </TableCell>
+            ))
+          ) : props.error ? (
+            <TableRow>
+              <TableCell colSpan={props.columns.length} className="h-24">
+                <div className="flex items-center justify-center gap-2 text-destructive">
+                  <AlertCircle className="size-4" />
+                  <span>{props.error}</span>
+                </div>
+              </TableCell>
+            </TableRow>
+          ) : table.getRowModel().rows?.length ? (
+            table.getRowModel().rows.map((row) => (
+              <TableRow
+                key={row.id}
+                data-state={row.getIsSelected() && "selected"}
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
               </TableRow>
-            ) : table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id}>
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
-                      )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
-            ) : (
-              <TableRow>
-                <TableCell
-                  colSpan={props.columns.length}
-                  className="h-24 text-center"
-                >
-                  No results.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </div>
+            ))
+          ) : (
+            <TableRow>
+              <TableCell
+                colSpan={props.columns.length}
+                className="h-24 text-center"
+              >
+                No results.
+              </TableCell>
+            </TableRow>
+          )}
+        </TableBody>
+      </Table>
       <DataTablePagination
         table={table}
         pageIndex={props.withPagination ? props.page : 0}
         pageSize={props.withPagination ? props.perPage : props.data.length}
-        pageCount={props.withPagination ? Math.ceil(props.totalData / props.perPage) : 1}
+        pageCount={
+          props.withPagination ? Math.ceil(props.totalData / props.perPage) : 1
+        }
       />
     </div>
   );
 }
-
-

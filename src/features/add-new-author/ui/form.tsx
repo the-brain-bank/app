@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { mutate } from "../api/mutation";
-import { FormFields, formSchema } from "../model/schema";
+import { type FormFields, formSchema } from "../model/schema";
 
 export function Form() {
   const router = useRouter();
@@ -27,7 +27,7 @@ export function Form() {
       name: "",
       bio: "",
       industry: "",
-      role: "AUTHOR",
+      role: ["AUTHOR"],
       image: null,
       email: null
     },

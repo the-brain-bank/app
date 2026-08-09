@@ -8,7 +8,7 @@ export class SearchAuthorByNameUseCase {
     const users = ResultAsync.fromThrowable(
       async () => {
         return this.userRepository.findByRole({
-          role: "AUTHOR",
+          role: ["AUTHOR"],
           search: query,
           limit: 20,
         });

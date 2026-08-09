@@ -6,7 +6,7 @@ export const formSchema = z.object({
   email: z.email("Invalid email address").nullable(),
   bio: z.string().optional(),
   industry: z.string().min(1, "Industry is required"),
-  role: z.enum(USER_ROLES).default("AUTHOR"),
+  role: z.enum(USER_ROLES).array().default(["AUTHOR"]),
   image: z.string().nullable().optional(),
 });
 

@@ -1,5 +1,5 @@
 import z from "zod";
-import { Book } from "./book";
+import type { Book } from "./book";
 
 export interface Category {
   id: string;

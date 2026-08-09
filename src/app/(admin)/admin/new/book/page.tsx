@@ -4,6 +4,11 @@ import { AddNewBook } from "@/features/add-new-book";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
+export const metadata = {
+  title: "Add a new book",
+  description: "Add a new book to the library",
+};
+
 export default function Page() {
   return (
     <>

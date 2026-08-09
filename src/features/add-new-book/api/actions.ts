@@ -13,7 +13,7 @@ export async function searchCategoriesAction(
 
 export async function searchUsersAction(search: string): Promise<User[]> {
   return await userRepository.findByRole({
-    role: "AUTHOR",
+    role: ["AUTHOR"],
     limit: 20,
     offset: 0,
     search,

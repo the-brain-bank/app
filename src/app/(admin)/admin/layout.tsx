@@ -19,7 +19,7 @@ export default async function AdminLayout({
     <>
       <SidebarProvider>
         <AppSidebar />
-        <main className="w-full">
+        <main className="relative flex min-w-0 flex-1 flex-col">
           <SidebarTrigger />
           <div className="p-6 w-full">{children}</div>
         </main>

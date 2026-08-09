@@ -1,6 +1,6 @@
 import type { UserRepository } from "@/core/application/ports/user";
 import type { User } from "@/core/domain/entities/user";
-import { and, desc, eq, ilike } from "drizzle-orm";
+import { and, desc, eq, ilike, arrayContains, arrayOverlaps } from "drizzle-orm";
 import { db } from "./index";
 import { users } from "./schema";
 import { ResultAsync } from "neverthrow";
@@ -42,7 +42,7 @@ export class DrizzleUserRepository implements UserRepository {
   }
 
   findByRole(payload: {
-    role: User["role"];
+    role: User["role"] | [];
     limit?: number;
     offset?: number;
     search?: string;
@@ -51,8 +51,8 @@ export class DrizzleUserRepository implements UserRepository {
     if (payload.search) {
       conditions.push(ilike(users.name, `%${payload.search}%`));
     }
-    if (payload.role) {
-      conditions.push(eq(users.role, payload.role));
+    if (payload.role && payload.role.length > 0) {
+      conditions.push(arrayOverlaps(users.role, payload.role));
     }
 
     const where = conditions.length > 0 ? and(...conditions) : undefined;

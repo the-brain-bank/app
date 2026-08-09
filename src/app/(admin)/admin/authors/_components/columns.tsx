@@ -1,9 +1,9 @@
-import type { User } from "@/core/domain/entities/user";
+import type { AuthorUser, User } from "@/core/domain/entities/user";
 import { formatHttpDate } from "@/lib/utils";
 import type { ColumnDef } from "@tanstack/react-table";
 import Link from "next/link";
 
-export const columns: ColumnDef<User>[] = [
+export const columns: ColumnDef<User & AuthorUser>[] = [
   {
     accessorKey: "name",
     header: "Name",
@@ -21,7 +21,7 @@ export const columns: ColumnDef<User>[] = [
     accessorKey: "role",
     header: "Role",
     cell: ({ row }) => (
-      <span className="capitalize text-sm">{row.original.role.toLowerCase()}</span>
+      <span className="capitalize text-sm">{row.original.role}</span>
     ),
   },
   {
@@ -51,7 +51,7 @@ export const columns: ColumnDef<User>[] = [
       const bio = row.original.bio;
       if (!bio) return <span className="text-muted-foreground">—</span>;
       return (
-        <span className="text-sm text-muted-foreground line-clamp-1 max-w-[240px]">
+        <span className="text-sm text-muted-foreground line-clamp-1 max-w-60">
           {bio}
         </span>
       );

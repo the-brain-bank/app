@@ -3,6 +3,11 @@ import { AddNewAuthorForm } from "@/features/add-new-author";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
+export const metadata = {
+  title: "Add a new author",
+  description: "Add a new author to the library",
+};
+
 export default function Page() {
   return (
     <div className="space-y-6">

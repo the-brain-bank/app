@@ -6,6 +6,11 @@ import { EditCategory } from "@/features/edit-category";
 import { PlusCircle } from "lucide-react";
 import Link from "next/link";
 
+export const metadata = {
+  title: "Categories",
+  description: "Manage categories in the library",
+};
+
 export default async function Page() {
   return (
     <section className="space-y-8">

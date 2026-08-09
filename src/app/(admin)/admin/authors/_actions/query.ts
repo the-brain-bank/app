@@ -9,7 +9,7 @@ export async function getAllAuthors(query: {
 }) {
   try {
     const data = await userRepository.findByRole({
-      role: "AUTHOR",
+      role: ["AUTHOR"],
       limit: query.limit,
       offset: query.offset,
       search: query.search,

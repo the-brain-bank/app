@@ -1,6 +1,6 @@
 import type { Book } from "@/core/domain/entities/book";
-import { Result } from "neverthrow";
-import { PaginatedResponse } from "../types/paginatinated-response";
+import type { Result } from "neverthrow";
+import type { PaginatedResponse } from "../types/paginatinated-response";
 
 export interface GetAllBooksQuery {
   limit: number;
@@ -13,7 +13,7 @@ export interface GetAllBooksQuery {
 export interface BookRepository {
   findById(id: string): Promise<Book | null>;
   findByAuthorId(authorId: string): Promise<Book[]>;
-  findTopBooks(limit?: number): Promise<Book[]>;
+  findTopBooks(limit?: number): Promise<Result<Book[], string>>;
   create(
     book: Omit<
       Book,
@@ -24,9 +24,19 @@ export interface BookRepository {
   updateById(
     bookId: Book["id"],
     book: Partial<
-      Omit<Book, "id" | "createdAt" | "updatedAt" | "author" | "categories" | "recommendations">
+      Omit<
+        Book,
+        | "id"
+        | "createdAt"
+        | "updatedAt"
+        | "author"
+        | "categories"
+        | "recommendations"
+      >
     >,
     categoryIds?: string[],
   ): Promise<Omit<Book, "author" | "categories" | "recommendations">>;
-  getAll(query: GetAllBooksQuery): Promise<Result<PaginatedResponse<Book>, string>>;
+  getAll(
+    query: GetAllBooksQuery,
+  ): Promise<Result<PaginatedResponse<Book>, string>>;
 }

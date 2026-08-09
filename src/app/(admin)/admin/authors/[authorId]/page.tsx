@@ -1,6 +1,5 @@
 import { sessionAdapter, userRepository } from "@/composition";
 import { notFound } from "next/navigation";
-import { Widget as AuthorDetailsWidget } from "@/components/widgets/author/ui/author-details";
 import Link from "next/dist/api/link";
 import { buttonVariants } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
@@ -11,12 +10,10 @@ import {
   AuthorTitle,
 } from "@/components/widgets/author/ui/widget";
 import { AuthorBooks } from "@/features/author-books";
-import { UploadBookCover } from "@/features/upload-book-cover";
 import { EditCover } from "./_components/actions/edit-cover";
 import { DeleteAuthor } from "./_components/actions/delete";
-import type { User } from "@/core/domain/entities/user";
+import type { AuthorUser, User } from "@/core/domain/entities/user";
 import { EditAuthor } from "./_components/actions/edit";
-import { UploadAuthorImage } from "@/features/upload-author-image";
 
 export default async function AuthorDetail({
   params,
@@ -29,7 +26,12 @@ export default async function AuthorDetail({
   if (!result) {
     notFound();
   }
-  const author = result;
+
+  if(!result.role.includes("AUTHOR")) {
+    notFound();
+  }
+
+  const author = result as User & AuthorUser;
 
   return (
     <section className="py-12">
@@ -63,7 +65,7 @@ async function Actions({ author }: { author: User }) {
 
   return (
     <AuthorActions>
-      {session.value.user.role === "ADMIN" && <DeleteAuthor author={author} />}
+      {session.value.user.role.includes("ADMIN") && <DeleteAuthor author={author} />}
       <EditCover author={author} />
       <EditAuthor author={author} />
     </AuthorActions>

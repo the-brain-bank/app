@@ -214,7 +214,7 @@ export function AsyncSearchMultiDropdown<T>({
           disabled={disabled}
           aria-invalid={invalid || undefined}
           className={cn(
-            "h-auto min-h-9 w-full justify-between gap-2 font-normal p-2",
+            "w-full justify-between gap-2 font-normal p-2",
             value.length === 0 && "text-muted-foreground",
             className,
           )}

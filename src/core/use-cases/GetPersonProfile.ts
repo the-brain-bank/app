@@ -1,22 +1,22 @@
-import { PersonRepository } from '../application/ports/user';
-import { BookRepository } from '../application/ports/book';
-import { RecommendationRepository } from '../application/ports/recommendation';
-import { Person } from '../domain/entities/user';
-import { Book } from '../domain/entities/Book';
-import { Recommendation } from '../domain/entities/recommendation';
+import type { BookRepository } from "../application/ports/book";
+import type { RecommendationRepository } from "../application/ports/recommendation";
+import type { UserRepository } from "../application/ports/user";
+import type { Book } from "../domain/entities/book";
+import type { Recommendation } from "../domain/entities/recommendation";
+import type { User } from "../domain/entities/user";
 
 export interface PersonProfile {
-  person: Person;
+  person: User;
   authoredBooks: Book[];
   recommendedBooks: Recommendation[];
 }
 
 export class GetPersonProfile {
   constructor(
-    private readonly personRepository: PersonRepository,
+    private readonly personRepository: UserRepository,
     private readonly bookRepository: BookRepository,
-    private readonly recommendationRepository: RecommendationRepository
-  ) { }
+    private readonly recommendationRepository: RecommendationRepository,
+  ) {}
 
   async execute(slug: string): Promise<PersonProfile | null> {
     const person = await this.personRepository.findBySlug(slug);

@@ -43,9 +43,9 @@ export default async function BookDetailPage({
             <BookCover recommendationCount={book.recommendations.length} className="max-h-100 w-auto" src={book.coverImage} />
           </div>
           <div>
-            <div>
-              <BookTitle className="relative">{book.title}</BookTitle>
-              <BookDescription>{book.title}</BookDescription>
+            <div className="max-w-md">
+              <BookTitle className="relative line-clamp-none">{book.title}</BookTitle>
+              <BookDescription className="line-clamp-none">{book.description}</BookDescription>
             </div>
             <Separator />
             <div>
@@ -65,7 +65,7 @@ async function Actions({ book }: { book: Book }) {
 
   return (
     <BookActions>
-      {session.value.user.role === "ADMIN" && <DeleteBook book={book} />}
+      {session.value.user.role.includes("ADMIN") && <DeleteBook book={book} />}
       <EditCover book={book} />
       <EditBook book={book} />
       <UploadBookCover />

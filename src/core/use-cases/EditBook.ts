@@ -17,12 +17,14 @@ export class EditBookUseCase {
     private readonly sessionAdapter: SessionPort,
   ) {}
 
-  async execute(command: EditBookCommand): Promise<Result<Omit<Book, "author" | "categories">, string>> {
+  async execute(
+    command: EditBookCommand,
+  ): Promise<Result<Omit<Book, "author" | "categories">, string>> {
     const getSessionResult = await this.sessionAdapter.getSession();
     if (getSessionResult.isErr()) return errAsync(getSessionResult.error);
 
     const session = getSessionResult.value;
-    if (session.user.role !== "ADMIN") {
+    if (session.user.role.includes("ADMIN") === false) {
       return errAsync("Only admins can edit books.");
     }
 

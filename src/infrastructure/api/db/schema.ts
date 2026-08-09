@@ -1,5 +1,5 @@
 import { USER_ROLES } from "@/core/domain/entities/user";
-import { relations } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import {
   boolean,
   index,
@@ -11,7 +11,7 @@ import {
   uuid,
 } from "drizzle-orm/pg-core";
 
-export const roleEnum = pgEnum("role", USER_ROLES);
+export const roleEnum = pgEnum("user_role", USER_ROLES);
 
 export const categories = pgTable("categories", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -26,7 +26,7 @@ export const users = pgTable("users", {
   bio: text("bio"),
   image: text("image"),
   industry: text("industry").notNull(),
-  role: roleEnum("role").notNull().default("USER"),
+  role: roleEnum("role").array().notNull().default(sql`'{USER}'::user_role[]`),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()
@@ -94,7 +94,7 @@ export const verifications = pgTable(
 );
 
 export const books = pgTable("books", {
-  id: uuid("id").defaultRandom().primaryKey(),
+  id: uuid("id").notNull().defaultRandom().primaryKey(),
   title: text("title").notNull(),
   slug: text("slug").notNull().unique(),
   coverImage: text("cover_image").notNull(),
@@ -109,6 +109,7 @@ export const books = pgTable("books", {
 export const recommendations = pgTable(
   "recommendations",
   {
+    id: uuid("id").notNull().defaultRandom(),
     bookId: uuid("book_id")
       .notNull()
       .references(() => books.id),
@@ -118,7 +119,7 @@ export const recommendations = pgTable(
     quote: text("quote").notNull(),
     sourceUrl: text("source_url").notNull(),
     createdAt: timestamp("created_at").defaultNow().notNull(),
-    updatedAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").defaultNow().notNull(),
   },
   (t) => [
     primaryKey({ columns: [t.bookId, t.authorId] }),

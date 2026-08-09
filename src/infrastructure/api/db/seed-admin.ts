@@ -24,7 +24,7 @@ import { eq } from "drizzle-orm";
 import * as schema from "./schema";
 import { users, accounts } from "./schema";
 import { randomUUID } from "node:crypto";
-import { hashPassword } from "@better-auth/utils/password";
+import { hashPassword } from "better-auth/crypto";
 
 // ── helpers ──────────────────────────────────────────────────────────
 function env(key: string, fallback?: string): string {
@@ -54,12 +54,14 @@ async function seedAdmin() {
   });
 
   if (existing) {
-    if (existing.role === "ADMIN") {
-      console.log(`✅  Admin user already exists (${adminEmail}). Nothing to do.`);
+    if (existing.role.includes("ADMIN")) {
+      console.log(
+        `✅  Admin user already exists (${adminEmail}). Nothing to do.`,
+      );
     } else {
       await db
         .update(users)
-        .set({ role: "ADMIN" })
+        .set({ role: [...existing.role, "ADMIN"] })
         .where(eq(users.id, existing.id));
       console.log(`✅  Promoted existing user ${adminEmail} to ADMIN.`);
     }
@@ -77,7 +79,7 @@ async function seedAdmin() {
     email: adminEmail,
     emailVerified: true,
     industry: adminIndustry,
-    role: "ADMIN",
+    role: ["ADMIN"],
     createdAt: now,
     updatedAt: now,
   });

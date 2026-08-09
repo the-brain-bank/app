@@ -17,8 +17,8 @@ export class DrizzleBookRepository implements BookRepository {
         author: true,
         recommendations: true,
         categories: {
-          with: { category: true }
-        }
+          with: { category: true },
+        },
       },
     });
 
@@ -37,37 +37,37 @@ export class DrizzleBookRepository implements BookRepository {
       with: {
         author: {
           with: {
-            authoredBooks: true
-          }
+            authoredBooks: true,
+          },
         },
         recommendations: true,
         categories: {
           with: {
-            category: true
-          }
-        }
+            category: true,
+          },
+        },
       },
     });
   }
 
-  async findTopBooks(limit: number = 10): Promise<Book[]> {
-    return db.query.books.findMany({
-      limit,
-      orderBy: [desc(books.createdAt)],
-      with: {
-        author: {
+  async findTopBooks(limit: number = 10): Promise<Result<Book[], string>> {
+    return await ResultAsync.fromThrowable(
+      async () => {
+        const result = await db.query.books.findMany({
+          limit,
+          orderBy: [desc(books.createdAt)],
           with: {
-            authoredBooks: true
-          }
-        },
-        recommendations: true,
-        categories: {
-          with: {
-            category: true
-          }
-        }
+            author: true,
+            recommendations: true,
+            categories: true,
+          },
+        });
+        return result as unknown as Book[];
       },
-    });
+      (error) => {
+        return `Failed to find top books: ${error instanceof Error ? error.message : String(error)}`;
+      },
+    )();
   }
 
   async create(
@@ -96,7 +96,15 @@ export class DrizzleBookRepository implements BookRepository {
   async updateById(
     bookId: Book["id"],
     book: Partial<
-      Omit<Book, "id" | "createdAt" | "updatedAt" | "author" | "categories" | "recommendations">
+      Omit<
+        Book,
+        | "id"
+        | "createdAt"
+        | "updatedAt"
+        | "author"
+        | "categories"
+        | "recommendations"
+      >
     >,
     categoryIds?: string[],
   ): Promise<Omit<Book, "author" | "categories" | "recommendations">> {
@@ -108,7 +116,9 @@ export class DrizzleBookRepository implements BookRepository {
         .returning();
 
       if (categoryIds) {
-        await tx.delete(categoriesToBooks).where(eq(categoriesToBooks.bookId, bookId));
+        await tx
+          .delete(categoriesToBooks)
+          .where(eq(categoriesToBooks.bookId, bookId));
         if (categoryIds.length > 0) {
           await tx.insert(categoriesToBooks).values(
             categoryIds.map((categoryId) => ({
@@ -170,7 +180,7 @@ export class DrizzleBookRepository implements BookRepository {
                 category: true,
               },
             },
-            recommendations: true
+            recommendations: true,
           },
         });
 
@@ -197,4 +207,3 @@ export class DrizzleBookRepository implements BookRepository {
     )();
   }
 }
-

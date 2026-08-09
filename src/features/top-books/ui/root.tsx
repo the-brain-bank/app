@@ -11,8 +11,11 @@ export async function Root() {
       <div className="container mx-auto">
         <TypographyH2 className="mb-4">Top Books</TypographyH2>
         <BooksGrid>
-
-          <BookList books={data} />
+          {data.success ? (
+            <BookList books={data.data ?? []} />
+          ) : (
+            <p>{data.error}</p>
+          )}
         </BooksGrid>
       </div>
     </section>

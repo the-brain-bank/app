@@ -59,7 +59,6 @@ export function Form(props: Props) {
   });
 
   function onSubmit(data: FormFields) {
-    console.log(data);
     mutationResult.mutateAsync(data);
   }
 
