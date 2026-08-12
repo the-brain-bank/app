@@ -1,23 +1,23 @@
-import { authorRepository } from "@/composition";
+import { influencerRepository } from "@/composition";
 import type { User } from "@/core/domain/entities/user";
 import { redirect } from "next/navigation";
-import { Widget as AuthorDetails } from "@/components/widgets/author/ui/author-details";
+import { Widget } from "@/components/widgets/influencer/ui/details";
 
 export default async function ({
   params,
 }: {
   params: Promise<{
-    authorId: User["id"];
+    influencerId: User["id"];
   }>;
 }) {
-  const { authorId } = await params;
-  const result = await authorRepository.findById(authorId);
+  const { influencerId } = await params;
+  const result = await influencerRepository.findById(influencerId);
   if (result.isErr()) redirect("/");
 
   return (
     <section className="py-24">
       <div className="container mx-auto">
-        <AuthorDetails author={result.value} />
+        <Widget influencer={result.value} />
       </div>
     </section>
   );

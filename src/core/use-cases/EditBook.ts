@@ -2,6 +2,7 @@ import { Book } from "@/core/domain/entities/book";
 import { errAsync, Result, ResultAsync } from "neverthrow";
 import { BookRepository } from "../application/ports/book";
 import { SessionPort } from "../application/ports/session";
+import { isAdminUser } from "../domain/entities/user";
 
 export interface EditBookCommand {
   bookId: string;
@@ -19,12 +20,12 @@ export class EditBookUseCase {
 
   async execute(
     command: EditBookCommand,
-  ): Promise<Result<Omit<Book, "author" | "categories">, string>> {
+  ): Promise<Result<Omit<Book, "author" | "categories" | "recommendations">, string>> {
     const getSessionResult = await this.sessionAdapter.getSession();
     if (getSessionResult.isErr()) return errAsync(getSessionResult.error);
 
     const session = getSessionResult.value;
-    if (session.user.role.includes("ADMIN") === false) {
+    if (isAdminUser(session.user) === false) {
       return errAsync("Only admins can edit books.");
     }
 

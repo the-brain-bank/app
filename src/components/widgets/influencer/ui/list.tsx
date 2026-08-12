@@ -2,14 +2,14 @@ import type { InfluencerUser, User } from "@/core/domain/entities/user";
 import { Content, Image, Root, Title } from "./widget";
 
 interface Props {
-  influencers: User[] & InfluencerUser;
+  influencers: (User & InfluencerUser)[];
 }
 
 export function List({ influencers }: Props) {
   return (
     <ul className="grid grid-cols-[repeat(1,max(300px,100vw))] sm:grid-cols-[repeat(2,300px)] xl:grid-cols-[repeat(3,300px)] gap-6">
       {influencers.map((influencer) => (
-        <Root influencerId={influencer.id} key={influencer.id}>
+        <Root key={influencer.id}>
           <Image
             className="aspect-square object-cover"
             src={influencer.image}

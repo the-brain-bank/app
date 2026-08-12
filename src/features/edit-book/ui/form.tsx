@@ -19,10 +19,11 @@ import { Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
-import { searchCategoriesAction, searchUsersAction } from "../api/actions";
+import { searchCategoriesAction } from "../api/actions";
 import { mutation } from "../api/mutation";
 import { FormFields, formSchema } from "../model/schema";
 import { Book } from "@/core/domain/entities/book";
+import { searchUsersAction } from "@/features/add-new-book/api/actions";
 
 interface Props {
   book: Book;
@@ -54,7 +55,7 @@ export function Form(props: Props) {
       title: props.book.title,
       description: props.book.description,
       authorId: props.book.authorId,
-      categoryIds: props.book.categories?.map(c => c.id) || [],
+      categoryIds: props.book.categories?.map((c) => c.id) || [],
     },
   });
 
@@ -117,7 +118,11 @@ export function Form(props: Props) {
                 value={field.value || null}
                 onChange={(val) => field.onChange(val)}
                 fetchPage={async ({ search }) => {
-                  return searchUsersAction(search);
+                  const result = await searchUsersAction(search);
+                  if (result.success === false) {
+                    return [];
+                  }
+                  return result.data;
                 }}
                 getOptionValue={(u) => u.id}
                 getOptionLabel={(u) => u.name}

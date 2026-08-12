@@ -1,10 +1,14 @@
-import { sessionAdapter, userRepository } from "@/composition";
+import {
+  authorRepository,
+  sessionAdapter,
+  userRepository,
+} from "@/composition";
 import { notFound } from "next/navigation";
 import Link from "next/dist/api/link";
 import { buttonVariants } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import {
-    AuthorActions,
+  AuthorActions,
   AuthorBio,
   AuthorImage,
   AuthorTitle,
@@ -12,7 +16,11 @@ import {
 import { AuthorBooks } from "@/features/author-books";
 import { EditCover } from "./_components/actions/edit-cover";
 import { DeleteAuthor } from "./_components/actions/delete";
-import type { AuthorUser, User } from "@/core/domain/entities/user";
+import {
+  AuthorUser,
+  isAdminUser,
+  type User,
+} from "@/core/domain/entities/user";
 import { EditAuthor } from "./_components/actions/edit";
 
 export default async function AuthorDetail({
@@ -21,17 +29,17 @@ export default async function AuthorDetail({
   params: Promise<{ authorId: string }>;
 }) {
   const { authorId } = await params;
-  const result = await userRepository.findById(authorId);
+  const result = await authorRepository.findById(authorId);
 
-  if (!result) {
+  if (result.isErr()) {
     notFound();
   }
 
-  if(!result.role.includes("AUTHOR")) {
+  if (!result.value.role.includes("AUTHOR")) {
     notFound();
   }
 
-  const author = result as User & AuthorUser;
+  const author = result.value;
 
   return (
     <section className="py-12">
@@ -44,9 +52,11 @@ export default async function AuthorDetail({
           Back to authors
         </Link>
         <div className="flex gap-12">
-          <div className="max-w-75">
-            <AuthorImage className="max-h-100 w-auto" src={author.image} />
-          </div>
+          <AuthorImage
+            alt={author.name}
+            className="max-h-100"
+            src={author.image}
+          />
           <div>
             <AuthorTitle className="relative">{author.name}</AuthorTitle>
             <AuthorBio>{author.bio}</AuthorBio>
@@ -59,13 +69,13 @@ export default async function AuthorDetail({
   );
 }
 
-async function Actions({ author }: { author: User }) {
+async function Actions({ author }: { author: User & AuthorUser }) {
   const session = await sessionAdapter.getSession();
   if (session.isErr()) return null;
 
   return (
     <AuthorActions>
-      {session.value.user.role.includes("ADMIN") && <DeleteAuthor author={author} />}
+      {isAdminUser(session.value.user) && <DeleteAuthor author={author} />}
       <EditCover author={author} />
       <EditAuthor author={author} />
     </AuthorActions>

@@ -29,7 +29,7 @@ export function Widget({
         <div className="grid grid-cols-1 md:grid-cols-2 divide-y md:divide-y-0 md:divide-x divide-[#2b659b]/20">
             {/* Left Column */}
             <div className="flex flex-col items-center justify-center">
-                <BookCover className="shadow-2xl w-[300px]" src={book.coverImage} alt={book.title} />
+                <BookCover recommendationCount={book.recommendations.length} className="shadow-2xl w-[300px]" src={book.coverImage} alt={book.title} />
                 <StoreBadges />
             </div>
 

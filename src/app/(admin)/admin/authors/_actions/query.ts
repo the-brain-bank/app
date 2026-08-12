@@ -1,27 +1,24 @@
 "use server";
 
-import { userRepository, searchAuthorsByNameUseCase } from "@/composition";
-import type { AuthorUser } from "@/core/domain/entities/user";
+import { searchAuthorsByNameUseCase, authorRepository } from "@/composition";
 
 export async function getAllAuthors(query: {
   limit: number;
   offset: number;
   search?: string;
 }) {
-  try {
-    const data = await userRepository.findByRole<AuthorUser>({
-      role: ["AUTHOR"],
-      limit: query.limit,
-      offset: query.offset,
-      search: query.search,
-    });
-    return { success: true as const, data };
-  } catch (e) {
+  const result = await authorRepository.findAll({
+    limit: query.limit,
+    offset: query.offset,
+    search: query.search,
+  });
+  if (result.isErr()) {
     return {
-      success: false as const,
-      error: e instanceof Error ? e.message : "Unknown error",
+      success: false,
+      error: result.error,
     };
   }
+  return { success: true, data: result.value };
 }
 
 export async function searchAuthors(query: string) {

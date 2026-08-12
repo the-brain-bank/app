@@ -19,16 +19,17 @@ export class AddNewBooksUseCase {
     private readonly imageUploader: UploadNewImageUseCase,
   ) {}
 
-  async execute(
-    command: CreateBookCommand,
-  ): Promise<Result<Book, string>> {
+  async execute(command: CreateBookCommand): Promise<Result<Book, string>> {
     const getSessionResult = await this.sessionAdapter.getSession();
     if (getSessionResult.isErr()) return errAsync(getSessionResult.error);
-    
+
     const uploadResult = await this.imageUploader.execute(command.coverImage);
     if (uploadResult.isErr()) return errAsync(uploadResult.error);
 
-    const slug = command.title.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + Date.now().toString().slice(-6);
+    const slug =
+      command.title.toLowerCase().replace(/[^a-z0-9]+/g, "-") +
+      "-" +
+      Date.now().toString().slice(-6);
 
     return ResultAsync.fromThrowable(() =>
       this.bookRepository.create(
@@ -38,8 +39,9 @@ export class AddNewBooksUseCase {
           coverImage: uploadResult.value,
           description: command.description,
           authorId: command.authorId,
+          recommendations: [],
         },
-        command.categoryIds
+        command.categoryIds,
       ),
     )().mapErr((error) => {
       if (error instanceof Error) return error.message;

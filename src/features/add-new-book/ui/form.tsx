@@ -116,7 +116,11 @@ export function Form(props: Props) {
                 value={field.value || null}
                 onChange={(val) => field.onChange(val)}
                 fetchPage={async ({ search }) => {
-                  return searchUsersAction(search);
+                  const result = await searchUsersAction(search);
+                  if (result.success === false) {
+                    return [];
+                  }
+                  return result.data;
                 }}
                 getOptionValue={(u) => u.id}
                 getOptionLabel={(u) => u.name}
@@ -173,7 +177,7 @@ export function Form(props: Props) {
               </FieldContent>
               <ImageUploadWidget
                 onImageCropped={(image) => {
-                  const title = form.getValues('title') || 'book';
+                  const title = form.getValues("title") || "book";
                   const file = new File(
                     [image],
                     `${title.toLowerCase()}-cover`,

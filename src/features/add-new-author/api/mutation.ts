@@ -1,7 +1,7 @@
 "use server";
 
 import { addNewAuthorUseCase } from "@/composition";
-import { FormFields } from "../model/schema";
+import type { FormFields } from "../model/schema";
 
 export async function mutate(data: FormFields) {
   const result = await addNewAuthorUseCase.execute(data);

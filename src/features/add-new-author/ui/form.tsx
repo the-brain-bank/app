@@ -27,9 +27,8 @@ export function Form() {
       name: "",
       bio: "",
       industry: "",
-      role: ["AUTHOR"],
       image: null,
-      email: null
+      email: null,
     },
   });
 
@@ -67,9 +66,7 @@ export function Form() {
                 autoComplete="off"
                 disabled={isSubmitting}
               />
-              {fieldState.invalid && (
-                <FieldError errors={[fieldState.error]} />
-              )}
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
         />
@@ -82,6 +79,7 @@ export function Form() {
               <FieldLabel htmlFor="author-email">Email</FieldLabel>
               <Input
                 {...field}
+                value={field.value ?? ""}
                 id="author-email"
                 type="email"
                 placeholder="e.g. author@example.com"
@@ -89,9 +87,7 @@ export function Form() {
                 autoComplete="off"
                 disabled={isSubmitting}
               />
-              {fieldState.invalid && (
-                <FieldError errors={[fieldState.error]} />
-              )}
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
         />
@@ -110,9 +106,7 @@ export function Form() {
                 autoComplete="off"
                 disabled={isSubmitting}
               />
-              {fieldState.invalid && (
-                <FieldError errors={[fieldState.error]} />
-              )}
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
         />
@@ -137,9 +131,7 @@ export function Form() {
                 disabled={isSubmitting}
                 rows={4}
               />
-              {fieldState.invalid && (
-                <FieldError errors={[fieldState.error]} />
-              )}
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
         />

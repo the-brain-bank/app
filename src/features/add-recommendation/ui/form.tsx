@@ -66,7 +66,11 @@ export function Form() {
                 value={field.value || null}
                 onChange={(val) => field.onChange(val)}
                 fetchPage={async ({ search }) => {
-                  return searchUsersAction(search);
+                  const result = await searchUsersAction(search);
+                  if (result.success === false) {
+                    return [];
+                  }
+                  return result.data;
                 }}
                 getOptionValue={(u) => u.id}
                 getOptionLabel={(u) => u.name}

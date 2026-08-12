@@ -8,7 +8,6 @@ import { DeleteCategoryUseCase } from "./core/use-cases/DeleteCategory";
 import { EditAuthorUseCase } from "./core/use-cases/EditAuthor";
 import { EditBookUseCase } from "./core/use-cases/EditBook";
 import { EditCategoryUseCase } from "./core/use-cases/EditCategory";
-import { GetPersonProfile } from "./core/use-cases/GetPersonProfile";
 import { GetTopAuthors } from "./core/use-cases/GetTopAuthors";
 import { GetTopBooks } from "./core/use-cases/GetTopBooks";
 import { SignInUseCase } from "./core/use-cases/SignIn";
@@ -18,7 +17,7 @@ import { UploadNewImageUseCase } from "./core/use-cases/UploadNewImage";
 import { BetterAuthRepository } from "./infrastructure/api/better-auth/auth";
 import { BetterAuthSessionAdapter } from "./infrastructure/api/better-auth/session";
 import { DrizzleCategoryRepository } from "./infrastructure/api/db/category";
-import { DrizzleUserRepository } from "./infrastructure/api/db/user";
+import { DrizzleAuthorRepository, DrizzleInfluencerRepository, DrizzleUserRepository } from "./infrastructure/api/db/user";
 import { ImageKitImageUploadService } from "./infrastructure/image-upload/imagekit-io";
 import { GetAllBooksUseCase } from "./core/use-cases/GetAllBooks";
 import { SearchAuthorByNameUseCase } from "./core/use-cases/SearchAuthorsByName";
@@ -26,13 +25,17 @@ import { GetAllRecommendationsUseCase } from "./core/use-cases/GetAllRecommendat
 import { AddRecommendationUseCase } from "./core/use-cases/AddRecommendation";
 import { AddNewUserUseCase } from "./core/use-cases/AddNewUser";
 import { SearchUsersByNameUseCase } from "./core/use-cases/SearchUsersByName";
+import { GetTopInfluencersUseCase } from "./core/use-cases/GetTopInfluencers";
+import type { AuthorUser, InfluencerUser, User } from "./core/domain/entities/user";
 
 // Initialize repositories
 export const bookRepository = new DrizzleBookRepository();
-export const userRepository = new DrizzleUserRepository();
+export const userRepository = new DrizzleUserRepository<User>();
 export const recommendationRepository = new DrizzleRecommendationRepository();
 export const authRepository = new BetterAuthRepository();
 export const categoryRepository = new DrizzleCategoryRepository();
+export const authorRepository = new DrizzleAuthorRepository<AuthorUser>();
+export const influencerRepository = new DrizzleInfluencerRepository<InfluencerUser>();
 
 // initialize adapters
 export const sessionAdapter = new BetterAuthSessionAdapter(userRepository);
@@ -52,7 +55,7 @@ export const addNewBookUseCase = new AddNewBooksUseCase(
   uploadNewImageUseCase,
 );
 export const addNewAuthorUseCase = new AddNewAuthorUseCase(
-  userRepository,
+  authorRepository,
   sessionAdapter,
 );
 export const addNewUserUseCase = new AddNewUserUseCase(
@@ -68,7 +71,7 @@ export const editCategoryUseCase = new EditCategoryUseCase(
   sessionAdapter,
 );
 export const editAuthorUseCase = new EditAuthorUseCase(
-  userRepository,
+  authorRepository,
   sessionAdapter,
 );
 export const editBookUseCase = new EditBookUseCase(
@@ -80,24 +83,20 @@ export const deleteCategoryUseCase = new DeleteCategoryUseCase(
   sessionAdapter,
 );
 export const searchAuthorsByNameUseCase = new SearchAuthorByNameUseCase(
-  userRepository,
+  authorRepository,
 );
 export const searchUsersByNameUseCase = new SearchUsersByNameUseCase(
   userRepository,
 );
-export const getPersonProfileUseCase = new GetPersonProfile(
-  userRepository,
-  bookRepository,
-  recommendationRepository,
-);
-export const getTopAuthorsUseCase = new GetTopAuthors(userRepository);
+export const getTopAuthorsUseCase = new GetTopAuthors(authorRepository);
+export const getTopInfluencersUseCase = new GetTopInfluencersUseCase(influencerRepository);
 export const signInUseCase = new SignInUseCase(authRepository);
 export const uploadBookCoverUseCase = new UploadBookCoverUseCase(
   bookRepository,
   imageUploadService,
 );
 export const uploadAuthorImageUseCase = new UploadAuthorImageUseCase(
-  userRepository,
+  authorRepository,
   imageUploadService,
 );
 export const getAllRecommendationsUseCase = new GetAllRecommendationsUseCase(

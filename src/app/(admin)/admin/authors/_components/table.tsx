@@ -27,7 +27,6 @@ export function Table() {
       if (result.success === false) {
         throw new Error(result.error);
       }
-      // findAll returns User[] (no total count), so we wrap it
       return result.data;
     },
   });
@@ -88,10 +87,10 @@ export function Table() {
         loading={query.isFetching}
         columns={columns}
         error={query.isError ? query.error.message : null}
-        data={query.data ?? []}
+        data={query.data?.data ?? []}
         page={page}
         perPage={pageSize}
-        totalData={query.data?.length ?? 0}
+        totalData={query.data?.total ?? 0}
         onPaginationChange={(state) => {
           setPage(state.pageIndex);
           setPageSize(state.pageSize);

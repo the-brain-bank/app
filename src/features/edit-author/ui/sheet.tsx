@@ -12,9 +12,9 @@ import {
 import { Pen } from "lucide-react";
 import { useState } from "react";
 import { Form } from "./form";
-import type { User } from "@/core/domain/entities/user";
+import type { AuthorUser, User } from "@/core/domain/entities/user";
 
-export function EditAuthorSheet(props: { author: User }) {
+export function EditAuthorSheet(props: { author: User & AuthorUser }) {
   const [open, setOpen] = useState(false);
 
   return (

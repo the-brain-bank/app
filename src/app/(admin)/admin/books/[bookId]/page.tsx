@@ -16,6 +16,7 @@ import { UploadBookCover } from "@/features/upload-book-cover";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
+import { isAdminUser } from "@/core/domain/entities/user";
 
 export default async function BookDetailPage({
   params,
@@ -40,7 +41,7 @@ export default async function BookDetailPage({
         </Link>
         <div className="flex flex-wrap gap-12">
           <div className="max-w-75">
-            <BookCover recommendationCount={book.recommendations.length} className="max-h-100 w-auto" src={book.coverImage} />
+            <BookCover alt={book.title} recommendationCount={book.recommendations.length} className="max-h-100 w-auto" src={book.coverImage} />
           </div>
           <div>
             <div className="max-w-md">
@@ -65,7 +66,7 @@ async function Actions({ book }: { book: Book }) {
 
   return (
     <BookActions>
-      {session.value.user.role.includes("ADMIN") && <DeleteBook book={book} />}
+      {isAdminUser(session.value.user) && <DeleteBook book={book} />}
       <EditCover book={book} />
       <EditBook book={book} />
       <UploadBookCover />

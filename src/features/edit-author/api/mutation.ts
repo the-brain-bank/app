@@ -1,9 +1,9 @@
 "use server";
 
 import { editAuthorUseCase } from "@/composition";
-import type { EditAuthorCommand } from "@/core/use-cases/EditAuthor";
+import type { UpdateByIdPayload } from "@/core/application/ports/user";
 
-export const mutation = async (command: EditAuthorCommand) => {
+export const mutation = async (command: UpdateByIdPayload) => {
   const result = await editAuthorUseCase.execute(command);
   if (result.isErr())
     return {

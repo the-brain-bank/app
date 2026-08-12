@@ -3,24 +3,15 @@ import { TypographyH3 } from "@/components/ui/typography";
 import type { User } from "@/core/domain/entities/user";
 import { cn } from "@/lib/utils";
 import { Edit, Image as ImageIcon, Trash2 } from "lucide-react";
-import Link from "next/link";
 import type { ComponentPropsWithoutRef } from "react";
 import NextImage from "next/image";
 
-export function Root({
-  className,
-  influencerId,
-  ...props
-}: ComponentPropsWithoutRef<"div"> & {
-  influencerId: User["id"];
-}) {
+export function Root({ className, ...props }: ComponentPropsWithoutRef<"div">) {
   return (
-    <Link href={`/influencers/${influencerId}`} className="block w-full">
-      <div
-        className={cn("group relative flex flex-col gap-3", className)}
-        {...props}
-      />
-    </Link>
+    <div
+      className={cn("group relative flex flex-col gap-3", className)}
+      {...props}
+    />
   );
 }
 
@@ -100,7 +91,6 @@ export function Actions({
   );
 }
 
-// visible only for influencerized users
 export function EditButton({
   className,
   ...props
@@ -113,7 +103,6 @@ export function EditButton({
   );
 }
 
-// visible only for influencerized users
 export function DeleteButton({
   className,
   ...props

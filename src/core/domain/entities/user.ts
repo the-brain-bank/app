@@ -12,7 +12,7 @@ export type UserRole = (typeof USER_ROLES)[number][];
 export type User = {
   id: string;
   name: string;
-  image: string;
+  image: string | null;
   createdAt: Date;
   updatedAt: Date;
 } & (AdminUser | EditorUser | AuthorUser | InfluencerUser | BaseUser);
@@ -53,3 +53,10 @@ export const ROLE_LABELS: Record<string, string> = {
   USER: "User",
   INFLUENCER: "Influencer",
 };
+
+export function isAdminUser(
+  user: User | AuthorUser | AdminUser | InfluencerUser | EditorUser | BaseUser,
+): user is AdminUser {
+  if ((user as AdminUser).role.includes("ADMIN")) return true;
+  return false;
+}

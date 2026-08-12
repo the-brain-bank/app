@@ -5,3 +5,7 @@ export type PaginatedResponse<T> = {
   pageSize: number;
   totalPages: number;
 };
+
+export class BasePaginatedResponse<T> {
+  
+}

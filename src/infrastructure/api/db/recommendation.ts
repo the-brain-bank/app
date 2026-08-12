@@ -1,13 +1,13 @@
 import { desc, eq } from "drizzle-orm";
-import {
+import type {
   GetAllRecommendationsParams,
   RecommendationRepository,
-} from "../../../core/application/ports/recommendation";
-import { Recommendation } from "../../../core/domain/entities/recommendation";
+} from "@/core/application/ports/recommendation";
+import type { Recommendation } from "@/core/domain/entities/recommendation";
 import { db } from "./index";
 import { recommendations } from "./schema";
-import { Result, ResultAsync } from "neverthrow";
-import { PaginatedResponse } from "@/core/application/types/paginatinated-response";
+import { type Result, ResultAsync } from "neverthrow";
+import type { PaginatedResponse } from "@/core/application/types/paginatinated-response";
 
 export class DrizzleRecommendationRepository
   implements RecommendationRepository
@@ -23,7 +23,7 @@ export class DrizzleRecommendationRepository
   async findByPersonId(personId: string): Promise<Recommendation[]> {
     return db.query.recommendations.findMany({
       where: eq(recommendations.authorId, personId),
-      with: { book: { with: { author: true, category: true } } },
+      with: { book: { with: { author: true } } },
       orderBy: [desc(recommendations.createdAt)],
     });
   }

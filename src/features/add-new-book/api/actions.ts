@@ -2,7 +2,6 @@
 
 import { categoryRepository, userRepository } from "@/composition";
 import type { Category } from "@/core/domain/entities/category";
-import type { AuthorUser } from "@/core/domain/entities/user";
 
 export async function searchCategoriesAction(
   search: string,
@@ -12,10 +11,21 @@ export async function searchCategoriesAction(
 }
 
 export async function searchUsersAction(search: string) {
-  return await userRepository.findByRole<AuthorUser>({
+  const result = await userRepository.findByRole({
     role: ["AUTHOR"],
     limit: 20,
     offset: 0,
     search,
   });
+
+  if (result.isErr()) {
+    return {
+      success: false as const,
+      error: result.error,
+    };
+  }
+  return {
+    success: true as const,
+    data: result.value,
+  };
 }

@@ -8,7 +8,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import type { User } from "@/core/domain/entities/user";
+import type { AuthorUser, User } from "@/core/domain/entities/user";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { Loader2 } from "lucide-react";
@@ -19,7 +19,7 @@ import { mutation } from "../api/mutation";
 import { type FormFields, formSchema } from "../model/schema";
 
 interface Props {
-  author: User;
+  author: User & AuthorUser;
   onSuccess?: () => void;
 }
 
@@ -29,8 +29,10 @@ export function Form(props: Props) {
     mutationKey: ["edit-author", props.author.id],
     mutationFn: async (fields: FormFields) => {
       const result = await mutation({
-        authorId: props.author.id,
-        ...fields,
+        id: props.author.id,
+        update: {
+          ...fields,
+        },
       });
       if (result.success === false) {
         return toast.error(result.error);

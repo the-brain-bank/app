@@ -7,5 +7,5 @@ export interface Session {
   userId: string;
   expiresAt: Date;
   token: string;
-  user: Pick<User, "id" | "role" | "name">;
+  user: User;
 }
