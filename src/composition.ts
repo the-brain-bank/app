@@ -17,7 +17,10 @@ import { UploadNewImageUseCase } from "./core/use-cases/UploadNewImage";
 import { BetterAuthRepository } from "./infrastructure/api/better-auth/auth";
 import { BetterAuthSessionAdapter } from "./infrastructure/api/better-auth/session";
 import { DrizzleCategoryRepository } from "./infrastructure/api/db/category";
-import { DrizzleAuthorRepository, DrizzleInfluencerRepository, DrizzleUserRepository } from "./infrastructure/api/db/user";
+import {
+  DrizzleAuthorRepository,
+  DrizzleUserRepository,
+} from "./infrastructure/api/db/user";
 import { ImageKitImageUploadService } from "./infrastructure/image-upload/imagekit-io";
 import { GetAllBooksUseCase } from "./core/use-cases/GetAllBooks";
 import { SearchAuthorByNameUseCase } from "./core/use-cases/SearchAuthorsByName";
@@ -26,7 +29,13 @@ import { AddRecommendationUseCase } from "./core/use-cases/AddRecommendation";
 import { AddNewUserUseCase } from "./core/use-cases/AddNewUser";
 import { SearchUsersByNameUseCase } from "./core/use-cases/SearchUsersByName";
 import { GetTopInfluencersUseCase } from "./core/use-cases/GetTopInfluencers";
-import type { AuthorUser, InfluencerUser, User } from "./core/domain/entities/user";
+import type {
+  AuthorUser,
+  InfluencerUser,
+  User,
+} from "./core/domain/entities/user";
+import { GetAllInfluencersUseCase } from "./core/use-cases/GetAllInfluencers";
+import { DrizzleInfluencerRepository } from "./infrastructure/api/db/influencer";
 
 // Initialize repositories
 export const bookRepository = new DrizzleBookRepository();
@@ -35,7 +44,8 @@ export const recommendationRepository = new DrizzleRecommendationRepository();
 export const authRepository = new BetterAuthRepository();
 export const categoryRepository = new DrizzleCategoryRepository();
 export const authorRepository = new DrizzleAuthorRepository<AuthorUser>();
-export const influencerRepository = new DrizzleInfluencerRepository<InfluencerUser>();
+export const influencerRepository =
+  new DrizzleInfluencerRepository();
 
 // initialize adapters
 export const sessionAdapter = new BetterAuthSessionAdapter(userRepository);
@@ -89,7 +99,6 @@ export const searchUsersByNameUseCase = new SearchUsersByNameUseCase(
   userRepository,
 );
 export const getTopAuthorsUseCase = new GetTopAuthors(authorRepository);
-export const getTopInfluencersUseCase = new GetTopInfluencersUseCase(influencerRepository);
 export const signInUseCase = new SignInUseCase(authRepository);
 export const uploadBookCoverUseCase = new UploadBookCoverUseCase(
   bookRepository,
@@ -102,4 +111,9 @@ export const uploadAuthorImageUseCase = new UploadAuthorImageUseCase(
 export const getAllRecommendationsUseCase = new GetAllRecommendationsUseCase(
   recommendationRepository,
 );
-export const addRecommendationUseCase = new AddRecommendationUseCase(recommendationRepository)
+export const addRecommendationUseCase = new AddRecommendationUseCase(
+  recommendationRepository,
+);
+export const getAllInfluencersUseCase = new GetAllInfluencersUseCase(
+  influencerRepository,
+);

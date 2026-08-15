@@ -1,8 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { TypographyH3 } from "@/components/ui/typography";
-import type { User } from "@/core/domain/entities/user";
 import { cn } from "@/lib/utils";
-import { Edit, Image as ImageIcon, Trash2 } from "lucide-react";
+import { Edit,  Trash2 } from "lucide-react";
 import type { ComponentPropsWithoutRef } from "react";
 import NextImage from "next/image";
 
@@ -22,21 +21,15 @@ export function Image({
   ...props
 }: ComponentPropsWithoutRef<typeof NextImage>) {
   return (
-    <div className={cn("w-full overflow-hidden bg-neutral-100/10", className)}>
-      {src ? (
-        <NextImage
-          src={src as string}
-          fill
-          alt={alt || "influencer cover"}
-          className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
-          {...props}
-        />
-      ) : (
-        <div className="flex h-full w-full items-center justify-center text-muted-foreground">
-          <ImageIcon className="h-10 w-10 opacity-20" />
-        </div>
+    <NextImage
+      src={src as string}
+      alt={alt || "influencer cover"}
+      className={cn(
+        "object-cover",
+        className,
       )}
-    </div>
+      {...props}
+    />
   );
 }
 

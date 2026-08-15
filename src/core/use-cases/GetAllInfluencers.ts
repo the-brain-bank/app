@@ -1,5 +1,4 @@
-import type { UserRepository } from "../application/ports/user";
-import type { InfluencerUser } from "../domain/entities/user";
+import { InfluencerRepository } from "../application/ports/influencer";
 
 interface Payload {
   limit: number;
@@ -10,11 +9,12 @@ interface Payload {
 }
 
 export class GetAllInfluencersUseCase {
-  constructor(private readonly userRepo: UserRepository<InfluencerUser>) {}
+  constructor(
+    private readonly repo: InfluencerRepository,
+  ) { }
 
   async execute(payload: Payload) {
-    return await this.userRepo.findByRole({
-      role: ["INFLUENCER"],
+    return await this.repo.getAll({
       limit: payload.limit,
       offset: payload.offset,
       search: payload.search,

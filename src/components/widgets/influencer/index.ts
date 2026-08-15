@@ -1,1 +1,1 @@
-export * as Author from "./ui/widget";
+export * as Influencer from "./ui/widget";

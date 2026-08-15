@@ -7,15 +7,18 @@ import type {
   UserRepository,
 } from "@/core/application/ports/user";
 import type { User } from "@/core/domain/entities/user";
-import { and, desc, eq, ilike, arrayOverlaps } from "drizzle-orm";
+import { and, desc, eq, ilike, arrayOverlaps, sql } from "drizzle-orm";
 import { db } from "./index";
-import { users } from "./schema";
+import { recommendations, users } from "./schema";
 import { type Result, ResultAsync } from "neverthrow";
 import type { PaginatedResponse } from "@/core/application/types/paginatinated-response";
+import {
+  Influencer,
+  InfluencerWithRecommendationCount,
+} from "@/core/domain/entities/influencer";
 
 export class DrizzleUserRepository<TUser>
-  implements UserRepository<User & TUser>
-{
+  implements UserRepository<User & TUser> {
   async findById(id: string): Promise<Result<User & TUser, string>> {
     return await ResultAsync.fromThrowable(async () => {
       const result = await db.query.users.findFirst({
@@ -209,6 +212,4 @@ export class DrizzleAuthorRepository<
   }
 }
 
-export class DrizzleInfluencerRepository<
-  InfluencerUser,
-> extends DrizzleUserRepository<InfluencerUser> {}
+
