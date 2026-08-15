@@ -1,7 +1,7 @@
-import { influencerRepository } from "@/composition";
-import type { User } from "@/core/domain/entities/user";
+import { influencerRepository, userRepository } from "@/composition";
+import type { InfluencerUser, User } from "@/core/domain/entities/user";
 import { redirect } from "next/navigation";
-import { Widget } from "@/components/widgets/influencer/ui/details";
+import { InfluencerRankedBooksWidget } from "@/components/widgets/influencer/ui/ranked-books";
 
 export default async function ({
   params,
@@ -11,13 +11,13 @@ export default async function ({
   }>;
 }) {
   const { influencerId } = await params;
-  const result = await influencerRepository.findById(influencerId);
+  const result = await userRepository.findById(influencerId);
   if (result.isErr()) redirect("/");
 
   return (
     <section className="py-24">
       <div className="container mx-auto">
-        <Widget influencer={result.value} />
+        <InfluencerRankedBooksWidget influencer={result.value as (User & InfluencerUser)} />
       </div>
     </section>
   );
