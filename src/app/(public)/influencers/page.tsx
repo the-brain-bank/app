@@ -5,10 +5,8 @@ import {
   AuthorTitle,
 } from "@/components/widgets/author/ui/widget";
 import { AuthorsGrid } from "@/components/widgets/author/ui/grid";
-import { AuthorLoader } from "@/components/widgets/author/ui/loader";
-import { getTopInfluencersUseCase } from "@/composition";
 import type { InfluencerUser, User } from "@/core/domain/entities/user";
-import { Suspense, use } from "react";
+import { use } from "react";
 import { match } from "ts-pattern";
 import type { Result } from "neverthrow";
 
@@ -16,9 +14,6 @@ export default function Page() {
   return (
     <section className="py-20">
       <div className="container mx-auto px-6">
-        <Suspense fallback={<AuthorLoader count={10} />}>
-          <Influencers promise={getTopInfluencersUseCase.execute()} />
-        </Suspense>
       </div>
     </section>
   );
