@@ -1,5 +1,11 @@
 import { TypographyH1 } from "@/components/ui/typography";
 import { SignInForm } from "@/features/sign-in";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Sign In",
+  description: "Sign in to your Brain Bank account to manage your reading lists and recommendations.",
+};
 
 export default function SignIn() {
     return (

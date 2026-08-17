@@ -3,6 +3,13 @@ import { Influencers } from "./_components/influencers";
 import { getAllInfluencersAction } from "./_actions/query";
 import { getAllInfluencersUseCase } from "@/composition";
 import { err, ok } from "neverthrow";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Favorite Books of Influential People",
+  description:
+    "Discover which books the world's top influencers, authors, and thought leaders recommend most. Crowdsourced rankings from tweets, interviews, and more.",
+};
 
 export default async function HomePage() {
   return (

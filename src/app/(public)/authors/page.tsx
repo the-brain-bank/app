@@ -11,6 +11,13 @@ import type { AuthorUser, User } from "@/core/domain/entities/user";
 import { Suspense, use } from "react";
 import { match } from "ts-pattern";
 import type { Result } from "neverthrow";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Top Authors",
+  description:
+    "Discover the most recommended authors. See which writers are mentioned most by influential people across interviews, tweets, and content.",
+};
 
 export default function AuthorsPage() {
   return (

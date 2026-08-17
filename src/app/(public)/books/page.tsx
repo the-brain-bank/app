@@ -11,9 +11,16 @@ import { BookLoader } from "@/components/widgets/books/ui/loader";
 import { getTopBooksUseCase } from "@/composition";
 import type { Book } from "@/core/domain/entities/book";
 import type { Result } from "neverthrow";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense, use } from "react";
 import { match } from "ts-pattern";
+
+export const metadata: Metadata = {
+  title: "Top Recommended Books",
+  description:
+    "Browse the highest-ranked books recommended by influential people. Rankings are based on how often a book is mentioned across interviews, tweets, and content.",
+};
 
 export default function BooksPage() {
   return (

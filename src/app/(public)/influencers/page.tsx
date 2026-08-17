@@ -9,6 +9,13 @@ import type { InfluencerUser, User } from "@/core/domain/entities/user";
 import { use } from "react";
 import { match } from "ts-pattern";
 import type { Result } from "neverthrow";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Influencers",
+  description:
+    "Browse influential people and discover which books they recommend. From entrepreneurs to scientists, see what the world's top minds are reading.",
+};
 
 export default function Page() {
   return (

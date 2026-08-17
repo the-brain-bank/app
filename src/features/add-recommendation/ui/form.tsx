@@ -18,10 +18,9 @@ import { mutate } from "../api/mutation";
 import { type FormFields, formSchema } from "../model/schema";
 import { AsyncSearchDropdown } from "@/components/widgets/async-search-dropdown/ui/widget";
 import type { User } from "@/core/domain/entities/user";
-import { searchUsersAction } from "@/features/add-new-book/api/actions";
 import type { Book } from "@/core/domain/entities/book";
 import { Textarea } from "@/components/ui/textarea";
-import { searchBooks } from "../api/query";
+import { searchBooks, searchUsersAction } from "../api/query";
 
 export function Form() {
   const router = useRouter();

@@ -1,6 +1,6 @@
 "use server";
 
-import { getAllBooksUseCase } from "@/composition";
+import { getAllBooksUseCase, userRepository } from "@/composition";
 import type { GetAllBooksQuery } from "@/core/application/ports/book";
 
 export async function searchBooks(query: GetAllBooksQuery) {
@@ -14,6 +14,26 @@ export async function searchBooks(query: GetAllBooksQuery) {
 
   return {
     success: true,
+    data: result.value,
+  };
+}
+
+export async function searchUsersAction(search: string) {
+  const result = await userRepository.findByRole({
+    role: ["INFLUENCER"],
+    limit: 20,
+    offset: 0,
+    search,
+  });
+
+  if (result.isErr()) {
+    return {
+      success: false as const,
+      error: result.error,
+    };
+  }
+  return {
+    success: true as const,
     data: result.value,
   };
 }

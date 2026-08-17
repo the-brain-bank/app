@@ -33,7 +33,7 @@ export function Influencers({
             {influencers.map((influencer) => (
               <Influencer.Root className="flex flex-col" key={influencer.id}>
                 <Image
-                  className="h-full w-full"
+                  className="h-full w-full object-cover"
                   width={300}
                   height={300}
                   src={influencer.image}
