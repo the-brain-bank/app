@@ -2,6 +2,7 @@
 
 import { addNewBookUseCase } from "@/composition";
 import { CreateBookCommand } from "@/core/use-cases/AddNewBook";
+import { revalidatePath } from "next/cache";
 
 export const mutation = async (
   book: CreateBookCommand,
@@ -12,6 +13,9 @@ export const mutation = async (
       success: false,
       error: result.error,
     };
+  
+  revalidatePath("/books")
+  revalidatePath("/")
 
   return {
     success: true,

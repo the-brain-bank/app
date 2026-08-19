@@ -4,6 +4,7 @@ import { addNewUserUseCase, uploadUserImageUseCase } from "@/composition";
 import type { FormFields } from "../model/schema";
 
 import type { User } from "@/core/domain/entities/user";
+import { revalidatePath } from "next/cache";
 
 export async function mutate(data: FormFields) {
   const createUserResult = await addNewUserUseCase.execute(
@@ -23,5 +24,7 @@ export async function mutate(data: FormFields) {
         error: uploadResult.error,
       };
   }
+  revalidatePath("/")
+  revalidatePath("/authors")
   return { success: true as const, user: createUserResult.value };
 }
