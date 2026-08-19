@@ -5,12 +5,12 @@ import Link from "next/link";
 
 export const metadata = {
   title: "Add a new user",
-  description: "Add a new user to the library",
+  description: "Add a new user to the system",
 };
 
 export default function Page() {
   return (
-    <div className="space-y-6">
+    <section className="space-y-6">
       <div className="pb-4 border-b border-border/40 space-y-1">
         <Link
           href="/admin/users"
@@ -23,6 +23,6 @@ export default function Page() {
       </div>
 
       <AddNewUserForm />
-    </div>
+    </section>
   );
 }

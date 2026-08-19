@@ -36,6 +36,7 @@ import type {
 } from "./core/domain/entities/user";
 import { GetAllInfluencersUseCase } from "./core/use-cases/GetAllInfluencers";
 import { DrizzleInfluencerRepository } from "./infrastructure/api/db/influencer";
+import { UploadUserImageUseCase } from "./core/use-cases/UploadUserImage";
 
 // Initialize repositories
 export const bookRepository = new DrizzleBookRepository();
@@ -44,8 +45,7 @@ export const recommendationRepository = new DrizzleRecommendationRepository();
 export const authRepository = new BetterAuthRepository();
 export const categoryRepository = new DrizzleCategoryRepository();
 export const authorRepository = new DrizzleAuthorRepository<AuthorUser>();
-export const influencerRepository =
-  new DrizzleInfluencerRepository();
+export const influencerRepository = new DrizzleInfluencerRepository();
 
 // initialize adapters
 export const sessionAdapter = new BetterAuthSessionAdapter(userRepository);
@@ -71,6 +71,10 @@ export const addNewAuthorUseCase = new AddNewAuthorUseCase(
 export const addNewUserUseCase = new AddNewUserUseCase(
   userRepository,
   sessionAdapter,
+);
+export const uploadUserImageUseCase = new UploadUserImageUseCase(
+  userRepository,
+  imageUploadService,
 );
 export const createCategoryUseCase = new CreateCategoryUseCase(
   categoryRepository,

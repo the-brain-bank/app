@@ -8,7 +8,7 @@ export const formSchema = z
     role: z.enum(USER_ROLES).array().min(1, "At least one role is required"),
     bio: z.string().optional(),
     industry: z.string().optional(),
-    image: z.string().nullable().optional(),
+    image: z.instanceof(File).optional(),
   })
   .superRefine((data, ctx) => {
     const roles = data.role;

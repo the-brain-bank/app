@@ -1,14 +1,27 @@
 "use server";
 
-import { addNewUserUseCase } from "@/composition";
-import { FormFields } from "../model/schema";
+import { addNewUserUseCase, uploadUserImageUseCase } from "@/composition";
+import type { FormFields } from "../model/schema";
 
 import type { User } from "@/core/domain/entities/user";
 
 export async function mutate(data: FormFields) {
-  const result = await addNewUserUseCase.execute(data as unknown as Omit<User, "id" | "createdAt" | "updatedAt">);
-  if (result.isErr()) {
-    return { success: false as const, error: result.error };
+  const createUserResult = await addNewUserUseCase.execute(
+    data as unknown as Omit<User, "id" | "createdAt" | "updatedAt">,
+  );
+  if (createUserResult.isErr()) {
+    return { success: false as const, error: createUserResult.error };
   }
-  return { success: true as const, user: result.value };
+  if (data.image) {
+    const uploadResult = await uploadUserImageUseCase.execute(
+      createUserResult.value.id,
+      data.image,
+    );
+    if (uploadResult.isErr())
+      return {
+        success: false as const,
+        error: uploadResult.error,
+      };
+  }
+  return { success: true as const, user: createUserResult.value };
 }

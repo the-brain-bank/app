@@ -18,13 +18,6 @@ export const columns: ColumnDef<User & AuthorUser>[] = [
     ),
   },
   {
-    accessorKey: "role",
-    header: "Role",
-    cell: ({ row }) => (
-      <span className="capitalize text-sm">{row.original.role}</span>
-    ),
-  },
-  {
     accessorKey: "industry",
     header: "Industry",
     cell: ({ row }) => {

@@ -12,11 +12,30 @@ import { AsyncSearchMultiDropdown } from "@/components/widgets/async-search-drop
 import { Textarea } from "@/components/ui/textarea";
 import { ROLE_LABELS, USER_ROLES } from "@/core/domain/entities/user";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2 } from "lucide-react";
+import { CopyIcon, FileSearchIcon, Loader2, XIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { mutate } from "../api/mutation";
+
+import {
+  Attachment,
+  AttachmentAction,
+  AttachmentActions,
+  AttachmentContent,
+  AttachmentDescription,
+  AttachmentMedia,
+  AttachmentTitle,
+  AttachmentTrigger,
+} from "@/components/ui/attachment";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 import { type FormFields, formSchema } from "../model/schema";
 
 export function Form() {
@@ -30,7 +49,6 @@ export function Form() {
       bio: "",
       industry: "",
       role: ["USER"],
-      image: null,
     },
   });
 
@@ -77,7 +95,7 @@ export function Form() {
                   if (!hasAuthorOrInfluencer) {
                     form.setValue("bio", "");
                     form.setValue("industry", "");
-                    form.setValue("image", null);
+                    form.setValue("image", undefined);
                   }
                 }}
                 fetchPage={async ({ search }) => {
@@ -189,6 +207,26 @@ export function Form() {
                     autoComplete="off"
                     disabled={isSubmitting}
                     rows={4}
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+
+            <Controller
+              name="image"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="user-image">
+                    Image
+                  </FieldLabel>
+                  <Input
+                    onChange={(evt) => field.onChange(evt.target.files?.[0])}
+                    type="file"
+                    id="user-image"
                   />
                   {fieldState.invalid && (
                     <FieldError errors={[fieldState.error]} />
