@@ -1,31 +1,38 @@
-"use client"
+"use client";
 
 import { Input } from "@/components/ui/input";
-import { Book } from "@/core/domain/entities/book";
-import { useDebounce } from "@/hooks/use-debounce"
-import { useEffect, useState } from "react"
+import type { Book } from "@/core/domain/entities/book";
+import { useDebounce } from "@/hooks/use-debounce";
+import { useEffect, useState } from "react";
 import { query } from "../api/query";
 
 export function SearchBookInput({
-    onChange
+  onChange,
 }: {
-    onChange: (value: Book[]) => void
+  onChange: (value: Book[]) => void;
 }) {
-    const [value, setValue] = useState<string>("");
-    const debouncedValue = useDebounce(value, 500);
+  const [value, setValue] = useState<string>("");
+  const debouncedValue = useDebounce(value, 500);
 
-    async function search() {
-        const result = await query(debouncedValue)
-        if (result.success) {
-            onChange(result.data)
-        }
+  async function search() {
+    const result = await query(debouncedValue);
+    console.log(result);
+    if (result.success) {
+      onChange(result.data);
+    } else {
+      onChange([]);
     }
+  }
 
-    useEffect(() => {
-        search()
-    }, [debouncedValue])
+  useEffect(() => {
+    search();
+  }, [debouncedValue]);
 
-    return (
-        <Input value={value} onChange={(e) => setValue(e.target.value)} placeholder="Search book" />
-    )
+  return (
+    <Input
+      value={value}
+      onChange={(e) => setValue(e.target.value)}
+      placeholder="Search book"
+    />
+  );
 }
