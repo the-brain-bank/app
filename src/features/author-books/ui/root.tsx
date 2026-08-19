@@ -13,7 +13,7 @@ export async function Root({ books, author }: { books: Book[]; author: User }) {
   return (
     <>
       <section className="pt-12">
-        <div className="container mx-auto">
+        <div className="">
           <TypographyH2 className="mb-6">Authored books</TypographyH2>
           <BooksGrid>
             <BookList books={mappedBooks} />

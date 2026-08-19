@@ -12,7 +12,7 @@ export default function PublicLayout({
       <div className="container mx-auto py-4">
         <SearchBook />
       </div>
-      <main className="min-h-screen">{children}</main>
+      <main>{children}</main>
     </>
   );
 }

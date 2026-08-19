@@ -54,7 +54,7 @@ export default async function ({ params }: Props) {
   if (result.isErr()) redirect("/");
 
   return (
-    <section className="py-24">
+    <section className="pb-12">
       <div className="container mx-auto">
         <AuthorDetails author={result.value} />
       </div>

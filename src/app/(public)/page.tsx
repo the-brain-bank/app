@@ -13,9 +13,9 @@ export const metadata: Metadata = {
 
 export default async function HomePage() {
   return (
-    <section className="text-left">
+    <section className="text-left max-h-[65vh] overflow-auto">
       <div className="container mx-auto">
-        <div className="space-y-8 py-12">
+        <div className="pb-12">
           <TypographyH1>Favorite books of influential people</TypographyH1>
           <p>
             The more a book is mentioned, the higher the recommendation in our
