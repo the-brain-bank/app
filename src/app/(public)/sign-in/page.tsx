@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function SignIn() {
     return (
-        <section className="py-8 min-h-screen flex items-center justify-center">
+        <section className="py-8 min-h-[70vh] flex items-center justify-center">
             <div className="container max-w-md">
                 <TypographyH1 className="text-center mb-4">
                     Welcome back!
