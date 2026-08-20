@@ -1,23 +1,13 @@
-import { db } from "@/infrastructure/api/db";
-import { books, recommendations, users } from "@/infrastructure/api/db/schema";
-import { eq, desc, sql } from "drizzle-orm";
-import Image from "next/image";
-import Link from "next/link";
 import { BookRecommendation } from "../../book-recommendation";
-import { AuthorUser, User } from "@/core/domain/entities/user";
+import type { AuthorUser, User } from "@/core/domain/entities/user";
+import { getBookRecommendationsUseCase } from "@/composition";
 
 export async function InfluencerMentionsWidget({ bookId }: { bookId: string }) {
-  const mentions = await db
-    .select({
-      recommendation: recommendations,
-      author: users,
-      book: books,
-    })
-    .from(recommendations)
-    .innerJoin(users, eq(recommendations.authorId, users.id))
-    .innerJoin(books, eq(recommendations.bookId, books.id))
-    .where(eq(recommendations.bookId, bookId))
-    .orderBy(desc(recommendations.createdAt));
+  const result = await getBookRecommendationsUseCase.execute(bookId);
+
+  if (result.isErr()) return "Failed to get recommendations";
+
+  const mentions = result.value;
 
   if (!mentions.length) return null;
 

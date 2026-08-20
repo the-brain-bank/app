@@ -1,31 +1,62 @@
 import { desc, eq } from "drizzle-orm";
 import type {
+  FindByBookIdResult,
+  FindByInfluencerIdResult,
   GetAllRecommendationsParams,
   RecommendationRepository,
 } from "@/core/application/ports/recommendation";
 import type { Recommendation } from "@/core/domain/entities/recommendation";
 import { db } from "./index";
-import { recommendations } from "./schema";
+import { books, recommendations, users } from "./schema";
 import { type Result, ResultAsync } from "neverthrow";
 import type { PaginatedResponse } from "@/core/application/types/paginatinated-response";
 
 export class DrizzleRecommendationRepository
   implements RecommendationRepository
 {
-  async findByBookId(bookId: string): Promise<Recommendation[]> {
-    return db.query.recommendations.findMany({
-      where: eq(recommendations.bookId, bookId),
-      with: { author: true },
-      orderBy: [desc(recommendations.createdAt)],
-    });
+  async findByBookId(
+    bookId: string,
+  ): Promise<Result<FindByBookIdResult[], string>> {
+    return ResultAsync.fromThrowable(async () => {
+      const response = await db
+        .select({
+          recommendation: recommendations,
+          author: users,
+          book: books,
+        })
+        .from(recommendations)
+        .innerJoin(users, eq(recommendations.authorId, users.id))
+        .innerJoin(books, eq(recommendations.bookId, books.id))
+        .where(eq(recommendations.bookId, bookId))
+        .orderBy(desc(recommendations.createdAt));
+
+      return response as unknown as FindByBookIdResult[];
+    })().mapErr((err) =>
+      err instanceof Error
+        ? err.message
+        : `Failed to invoke findByBookId: ${err}`,
+    );
   }
 
-  async findByPersonId(personId: string): Promise<Recommendation[]> {
-    return db.query.recommendations.findMany({
-      where: eq(recommendations.authorId, personId),
-      with: { book: { with: { author: true } } },
-      orderBy: [desc(recommendations.createdAt)],
-    });
+  async findByInfluencerId(
+    influencerId: string,
+  ): Promise<Result<FindByInfluencerIdResult[], string>> {
+    return await ResultAsync.fromThrowable(async () => {
+      const result = await db
+        .select({
+          recommendation: recommendations,
+          book: books,
+        })
+        .from(recommendations)
+        .innerJoin(books, eq(recommendations.bookId, books.id))
+        .where(eq(recommendations.authorId, influencerId));
+
+      return result as unknown as FindByInfluencerIdResult[];
+    })().mapErr((err) =>
+      err instanceof Error
+        ? err.message
+        : `Failed to invoke findByInfluencerId: ${err}`,
+    );
   }
 
   async create(

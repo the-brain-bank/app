@@ -1,35 +1,24 @@
-import { db } from "@/infrastructure/api/db";
-import { recommendations, books, users } from "@/infrastructure/api/db/schema";
-import { eq } from "drizzle-orm";
-import type {
-  AuthorUser,
-  InfluencerUser,
-  User,
-} from "@/core/domain/entities/user";
+import type { InfluencerUser, User } from "@/core/domain/entities/user";
 import Image from "next/image";
 import { TypographyH2 } from "@/components/ui/typography";
 import { BookRecommendation } from "../../book-recommendation";
 import { match, P } from "ts-pattern";
+import { findRecommendationsByInfluencer } from "@/composition";
 
 export async function InfluencerRankedBooksWidget({
   influencer,
 }: {
   influencer: User & InfluencerUser;
 }) {
-  const booksRecommended = await db
-    .select({
-      recommendation: recommendations,
-      book: books,
-      author: users,
-    })
-    .from(recommendations)
-    .innerJoin(books, eq(recommendations.bookId, books.id))
-    .innerJoin(users, eq(books.authorId, users.id))
-    .where(eq(recommendations.authorId, influencer.id));
+  const result = await findRecommendationsByInfluencer.execute(influencer.id);
 
-  if (!booksRecommended.length) return null;
+  if (result.isErr()) return "Failed to get influencer recommendations";
 
-  const totalInfluencerMentions = booksRecommended.length;
+  const recommendations = result.value;
+
+  if (!recommendations.length) return null;
+
+  const totalInfluencerMentions = recommendations.length;
 
   return (
     <div className="flex flex-col gap-12 w-full">
@@ -62,10 +51,11 @@ export async function InfluencerRankedBooksWidget({
 
       {/* Books List Section */}
       <div className="flex flex-col gap-16 mt-8">
-        {booksRecommended.map(({ recommendation, book, author }) => (
+        {recommendations.map(({ recommendation, book }) => (
           <BookRecommendation
             key={recommendation.id}
-            author={author as unknown as User & AuthorUser}
+            // @ts-expect-error
+            author={influencer}
             book={book}
             recommendation={recommendation}
           />

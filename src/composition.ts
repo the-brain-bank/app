@@ -28,15 +28,12 @@ import { GetAllRecommendationsUseCase } from "./core/use-cases/GetAllRecommendat
 import { AddRecommendationUseCase } from "./core/use-cases/AddRecommendation";
 import { AddNewUserUseCase } from "./core/use-cases/AddNewUser";
 import { SearchUsersByNameUseCase } from "./core/use-cases/SearchUsersByName";
-import { GetTopInfluencersUseCase } from "./core/use-cases/GetTopInfluencers";
-import type {
-  AuthorUser,
-  InfluencerUser,
-  User,
-} from "./core/domain/entities/user";
+import type { AuthorUser, User } from "./core/domain/entities/user";
 import { GetAllInfluencersUseCase } from "./core/use-cases/GetAllInfluencers";
 import { DrizzleInfluencerRepository } from "./infrastructure/api/db/influencer";
 import { UploadUserImageUseCase } from "./core/use-cases/UploadUserImage";
+import { GetBookRecommendationsUseCase } from "./core/use-cases/GetBookRecommendations";
+import { FindRecommendationsByInfluencer } from "./core/use-cases/FindRecommendationsByInfluencer";
 
 // Initialize repositories
 export const bookRepository = new DrizzleBookRepository();
@@ -58,6 +55,9 @@ export const uploadNewImageUseCase = new UploadNewImageUseCase(
   imageUploadService,
 );
 export const getAllBooksUseCase = new GetAllBooksUseCase(bookRepository);
+export const getBookRecommendationsUseCase = new GetBookRecommendationsUseCase(
+  recommendationRepository,
+);
 export const getTopBooksUseCase = new GetTopBooks(bookRepository);
 export const addNewBookUseCase = new AddNewBooksUseCase(
   bookRepository,
@@ -121,3 +121,5 @@ export const addRecommendationUseCase = new AddRecommendationUseCase(
 export const getAllInfluencersUseCase = new GetAllInfluencersUseCase(
   influencerRepository,
 );
+export const findRecommendationsByInfluencer =
+  new FindRecommendationsByInfluencer(recommendationRepository);
