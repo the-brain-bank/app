@@ -1,7 +1,7 @@
 import z from "zod";
 import { Category } from "./category";
-import { User } from "./user";
-import { Recommendation } from "./recommendation";
+import type { User } from "./user";
+import type { Recommendation } from "./recommendation";
 
 export interface Book {
   id: string;

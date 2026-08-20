@@ -54,7 +54,7 @@ export default async function ({ params }: Props) {
   if (result.isErr()) redirect("/");
 
   return (
-    <section className="pb-12">
+    <section className="py-12">
       <div className="container mx-auto">
         <InfluencerRankedBooksWidget influencer={result.value as (User & InfluencerUser)} />
       </div>
